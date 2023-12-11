@@ -10,10 +10,19 @@ This LC-3 Tic-Tac-Toe program is an implementation of the classic game Tic-Tac-T
 - Option to replay after a game concludes.
 
 ## Running the Program
-1. Run `./build.sh` to compile all files into one.
-2. Load `main-all.asm` into the LC-3 simulator
+1. Run `./compile.sh` to compile all files into one.
+2. Load `MAIN_run-me.asm` into the LC-3 simulator
 3. Compile and run in LC3Tools
 4. Follow the on-screen instructions to play the game.
+
+## Running via Terminal
+1. Clone (LC-3 Tools GitHub repo)[] onto your machine
+2. (Build/Compile the LC3-Tools binaries using these instructions)[https://github.com/chiragsakhuja/lc3tools/blob/master/docs/BUILD.md]
+3. Go into the `build/bin` (`cd bin`) folder and rename a couple files
+    a. `mv assembler lc3-assembler`
+    b. `mv simulator lc3-simulator`
+4. Modify the path to your lc3tools binary folder inside `run_terminal.sh`
+5. Run the program using `./run_terminal.sh`
 
 ## How to Play
 Players make moves by selecting a row (A, B, C) and a column (1, 2, 3). For example, to select the top-right cell, the player would input "A3". The game alternates between the human player and the AI opponent, updating the gameboard after each turn.
