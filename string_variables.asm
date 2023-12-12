@@ -1,20 +1,16 @@
+
 ; Gameboard Layout Constants
-;     1     2     3
-;        #     #     
-; A   X  #     #  O  
-;        #     #    
-;   #################
-;        #     #     
-; B      #  O  #     
-;        #     #     
-;   #################
-;        #     #     
-; C   X  #     #     
-;        #     #     
-COL_LABELS     .STRINGZ "     1     2     3  \n"
-ROW_SPACE      .STRINGZ "        #     #     \n"
-ROW_DIVIDER    .STRINGZ "   ################# \n"
-MID_ROW        .STRINGZ "  #  "
+;     1   2   3
+;
+; A   X │ X │ O 
+;    ───┼───┼───
+; B     │ O │   
+;    ───┼───┼───
+; C   X │   │   
+;
+COL_LABELS     .STRINGZ "     1   2   3  \n"
+ROW_DIVIDER    .STRINGZ "    ───┼───┼─── \n"
+MID_ROW        .STRINGZ " │ "
 END_ROW        .STRINGZ "  \n"
 START_ROW_A    .STRINGZ " A   "
 START_ROW_B    .STRINGZ " B   "

@@ -129,7 +129,6 @@ PRINT_ICON
 ;        #     #    
 
 REF_COL_LABELS .FILL COL_LABELS
-REF_ROW_SPACE .FILL ROW_SPACE
 REF_ROW_DIVIDER .FILL ROW_DIVIDER
 REF_MID_ROW .FILL MID_ROW
 REF_END_ROW .FILL END_ROW
@@ -155,8 +154,8 @@ PRINT_GAMEBOARD
     ; Print out all of the gameboard text
     LD R0, REF_COL_LABELS
     PUTS
-    LD R0, REF_ROW_SPACE
-    PUTS
+    
+    JSR PRINT_NEW_LINE
 
     ; Print Row A
     LD R0, REF_START_ROW_A
@@ -181,11 +180,7 @@ PRINT_GAMEBOARD
     PUTS
 
     ; middle
-    LD R0, REF_ROW_SPACE
-    PUTS
     LD R0, REF_ROW_DIVIDER
-    PUTS
-    LD R0, REF_ROW_SPACE
     PUTS
 
     ; Print Row B
@@ -212,11 +207,7 @@ PRINT_GAMEBOARD
 
 
     ; middle
-    LD R0, REF_ROW_SPACE
-    PUTS
     LD R0, REF_ROW_DIVIDER
-    PUTS
-    LD R0, REF_ROW_SPACE
     PUTS
 
     ; Print Row C
@@ -239,10 +230,6 @@ PRINT_GAMEBOARD
     JSR PRINT_TILE_ICON
 
     LD R0, REF_END_ROW
-    PUTS
-
-    ; end
-    LD R0, REF_ROW_SPACE
     PUTS
 
     JSR PRINT_NEW_LINE

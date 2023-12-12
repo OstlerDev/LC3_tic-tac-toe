@@ -27,13 +27,15 @@ TEMP_ADDR .FILL #0    ; Temporary storage for loading registers easily
 ; CONSTANTS
 ;
 ; Game Constants
-PLAYER  .FILL #1
-AI      .FILL #2
-EMPTY   .FILL #0
+EMPTY     .FILL #0
+PLAYER    .FILL #1
+PLAYER_2  .FILL #2
+AI        .FILL #3
 ; Output Constants
-PLAYER_ICON .STRINGZ "X"
-AI_ICON .STRINGZ "O"
-EMPTY_ICON .STRINGZ " "
+PLAYER_ICON   .STRINGZ "X"
+PLAYER_2_ICON .STRINGZ "O"
+AI_ICON       .STRINGZ "∞"
+EMPTY_ICON    .STRINGZ " "
 ; Input constants
 ROW_A   .STRINGZ "A"
 ROW_B   .STRINGZ "B"
