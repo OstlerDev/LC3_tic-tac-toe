@@ -56,6 +56,25 @@ CHECK_MATCHING
     ADD R4, R4, #1  ; Set R4 to 1 (all values match)
     RET             ; Return from subroutine
 
+REF3_TILE_A1 .FILL TILE_A1
+ALL_TILES_FILLED
+    LD R5, REF3_TILE_A1
+    AND R4, R4, #0
+    ADD R4, R4, #9 ; 9 tiles in our grid
+CHECK_LOOP
+    LDR R0, R5, #0       ; Load the value of the current variable into R0
+    BRz NOT_ALL_DEFINED         ; Branch to SET_FLAG if the value is zero
+    ADD R5, R5, #1       ; Increment the address pointer
+    ADD R4, R4, #-1      ; Decrement the counter
+    BRp CHECK_LOOP       ; Repeat if there are more variables
+    AND R0, R0, #0
+    ADD R0, R0, #1 ; return pos
+    RET
+NOT_ALL_DEFINED
+    AND R0, R0, #0
+    ADD R0, R0, #0 ; return zero
+    RET
+
 NOT_MATCH
     AND R4, R4, #0  ; Set R4 to 0 (no match)
     ADD R4, R4, #0  ; Perform ADD so that we can branch later
