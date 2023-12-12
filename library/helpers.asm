@@ -4,7 +4,8 @@ PRINT_NEW_LINE
     LD R0, REF_LOG_EMPTY_LINE   ; Load the address of the input prompt
     PUTS                     ; Display the prompt
     RET
-
+; Helper constants
+THREE .FILL #3
 ; Subroutine to multiply a number in R1 by 3
 MULT_BY_THREE
     ; Push R7 onto the stack
@@ -79,3 +80,44 @@ NOT_MATCH
     AND R4, R4, #0  ; Set R4 to 0 (no match)
     ADD R4, R4, #0  ; Perform ADD so that we can branch later
     RET             ; Return from subroutine
+
+REF_THINKING_STRINGS .FILL THINKING_STRINGS
+REF_CURRENT_THINKING_STRING .FILL CURRENT_THINKING_STRING
+REF_END_THINKING_STRINGS .FILL END_THINKING_STRINGS
+REF_END_THINKING_STRING .FILL END_THINKING_STRING
+INIT_THINKING_LOGS
+    ; Initialize pointers
+    LD R0, REF_THINKING_STRINGS       ; Load the address of the first string into R0
+    LD R1, REF_CURRENT_THINKING_STRING
+    STR R0, R1, #0
+    LD R0, REF_END_THINKING_STRINGS   ; Load the address of the end marker into R0
+    LD R1, REF_END_THINKING_STRING
+    STR R0, R1, #0
+    RET
+; Cycle through strings and log
+LOG_THINKING
+    LD R0, REF_CURRENT_THINKING_STRING ; Load the address of the pointer to the current string
+    LDR R0, R0, #0                     ; Load the current string address into R0
+    PUTS                                ; 'Log' the current string
+    ADD R1, R0, #1                      ; Move to the next character (after PUTS)
+    CHECK_LOG_LOOP
+        LDR R2, R1, #0                  ; Load the character at R1
+        BRz ADVANCE                     ; If null terminator, advance to next string
+        ADD R1, R1, #1                  ; Else, go to the next character
+        BR CHECK_LOG_LOOP
+    ADVANCE
+        LD R2, REF_END_THINKING_STRING  ; Load the address of the pointer to END_STRINGS
+        LDR R2, R2, #0                  ; Load the address of END_STRINGS
+        ADD R1, R1, #1                  ; Move to the start of the next string
+        NOT R3, R2                      ; Prepare to check for wrap-around
+        ADD R3, R3, #1
+        ADD R3, R1, R3                  ; If R1 == R2, we need to wrap around
+        BRz WRAP_AROUND                 ; Check for wrap-around
+        LD R0, REF_CURRENT_THINKING_STRING ; Update current string pointer
+        STR R1, R0, #0
+        RET
+    WRAP_AROUND
+        LD R1, REF_THINKING_STRINGS       ; Reset to the first string
+        LD R0, REF_CURRENT_THINKING_STRING
+        STR R1, R0, #0
+        RET

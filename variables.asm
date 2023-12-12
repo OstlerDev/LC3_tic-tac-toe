@@ -1,6 +1,8 @@
 ; VARIABLES
 ;
 ; Input variables
+SINGLE_PLAYER .FILL #0
+
 PLAYER_ROW    .BLKW 1    ; Raw input for player row    (ASCII)
 PLAYER_COLUMN .BLKW 1    ; Raw input for player column (ASCII)
 
@@ -46,7 +48,5 @@ ROW_C   .STRINGZ "C"
 COL_1   .STRINGZ "1"
 COL_2   .STRINGZ "2"
 COL_3   .STRINGZ "3"
-; Helper constants
-THREE .FILL #3
 
 

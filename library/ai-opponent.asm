@@ -4,6 +4,7 @@ REF2_AI .FILL AI
 REF2_PLAYER_ROW .FILL PLAYER_ROW
 REF2_PLAYER_COLUMN .FILL PLAYER_COLUMN
 REF2_CURRENT_PLAYER .FILL CURRENT_PLAYER
+REF2_LOG_EMPTY_LINE .FILL LOG_EMPTY_LINE
 
 REF2_ROW_A .FILL ROW_A
 REF2_ROW_B .FILL ROW_B
@@ -212,6 +213,16 @@ AI_DONE_PROCESSING
     ; Pop R7 off the stack
     LDR R7, R6, #0   ; Load R7 from the stack
     ADD R6, R6, #1   ; Increment stack pointer
+
+    LD R0, REF2_PLAYER_ROW
+    PUTS
+    ; We don't seem to need to log the column as well
+    ; an odd bug that might need fixing at some point
+    ; but it works right now.
+    ; LD R0, REF2_PLAYER_COLUMN
+    ; PUTS
+    LD R0, REF2_LOG_EMPTY_LINE
+    PUTS
 
     AND R0, R0, #0
     ADD R0, R0, #1   ; Push a pos op to the stack

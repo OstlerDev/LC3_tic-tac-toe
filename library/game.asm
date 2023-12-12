@@ -5,16 +5,24 @@ GAME_LOOP
     ADD R6, R6, #-1  ; Decrement stack pointer
     STR R7, R6, #0   ; Store R7 on the stack
 
-    JSR SINGLE_PLAYER_LOOP
-    ; JSR TWO_PLAYER_LOOP
+    LD R0, SINGLE_PLAYER
+    AND R1, R1, #0
+    ADD R1, R0, #0
+    BRp SINGLE_PLAYER_LOOP
+    BRz TWO_PLAYER_LOOP
 
     ; Pop R7 off the stack
     LDR R7, R6, #0   ; Load R7 from the stack
     ADD R6, R6, #1   ; Increment stack pointer
     RET
 
+REF_LOG_PLAYER_1 .FILL LOG_PLAYER_1
+REF_LOG_PLAYER_2 .FILL LOG_PLAYER_2
+REF_LOG_PLAYER_AI .FILL LOG_PLAYER_AI
 TWO_PLAYER_LOOP
     ; Player 1
+    LD R0, REF_LOG_PLAYER_1
+    PUTS
     LD R0, PLAYER
     ST R0, CURRENT_PLAYER
     JSR PROCESS_PLAYER_MOVE
@@ -23,6 +31,8 @@ TWO_PLAYER_LOOP
     BRP LOG_WIN_OCCURED
 
     ; Player 2
+    LD R0, REF_LOG_PLAYER_2
+    PUTS
     LD R0, PLAYER_2
     ST R0, CURRENT_PLAYER
     JSR PROCESS_PLAYER_MOVE
@@ -34,21 +44,33 @@ TWO_PLAYER_LOOP
 
 SINGLE_PLAYER_LOOP
     ; Player 1
+    LD R0, REF_LOG_PLAYER_1
+    PUTS
     LD R0, PLAYER
     ST R0, CURRENT_PLAYER
     JSR PROCESS_PLAYER_MOVE
     JSR PRINT_GAMEBOARD
+    ; Check Win
     JSR CHECK_WIN
     BRP LOG_WIN_OCCURED
+    ; Check Tie
+    JSR ALL_TILES_FILLED
+    BRP LOG_TIE_OCCURED
+
+    ; Log thinking
+    LD R0, REF_LOG_PLAYER_AI
+    PUTS
+    JSR LOG_THINKING
 
     ; AI Player
     LD R0, AI
     ST R0, CURRENT_PLAYER
     JSR AI_PROCESS_MOVE
     JSR PRINT_GAMEBOARD
+    ; Check Loss
     JSR CHECK_WIN
     BRP LOG_LOSS_OCCURED
-
+    ; Check Tie
     JSR ALL_TILES_FILLED
     BRP LOG_TIE_OCCURED
 
@@ -167,6 +189,10 @@ CHECK_WIN
     RET
 
 RESET_GAME
+    ; Push R7 onto the stack
+    ADD R6, R6, #-1  ; Decrement stack pointer
+    STR R7, R6, #0   ; Store R7 on the stack
+
     AND R0, R0, #0
     ST R0, TILE_A1
     ST R0, TILE_A2
@@ -177,6 +203,12 @@ RESET_GAME
     ST R0, TILE_C1
     ST R0, TILE_C2
     ST R0, TILE_C3
+
+    JSR PRINT_GAMEBOARD
+
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
     BR GAME_LOOP
 
 ; REF_ variables are used to manage references to far away 
@@ -184,7 +216,15 @@ RESET_GAME
 ; far away LC3 can access the program memory from.
 ; They store the memory location of the string that we want to use.
 
-; TODO, manage stack in errors so we properly can loop back up to main.
+REF_LOG_BOT_2 .FILL LOG_BOT_2
+REF_LOG_BOT_4 .FILL LOG_BOT_4
+PRINT_WELCOME
+    LD R0, REF_LOG_BOT_2
+    PUTS
+    LD R0, REF_LOG_BOT_4
+    PUTS
+    RET
+
 REF_LOG_INPUT_1 .FILL LOG_INPUT_1
 PRINT_INPUT_MOVE
     LD R0, REF_LOG_INPUT_1   ; Load the address of the input prompt
@@ -195,7 +235,7 @@ REF_LOG_ERROR_1 .FILL LOG_ERROR_1
 INPUT_ERROR
     LD R0, REF_LOG_ERROR_1   ; Load the address of the input prompt
     PUTS                     ; Display the prompt
-    BR PROCESS_PLAYER_MOVE
+    BR GAME_LOOP
 
 REF_LOG_ERROR_2 .FILL LOG_ERROR_2
 INPUT_ERROR_TILE_NOT_AVAILABLE

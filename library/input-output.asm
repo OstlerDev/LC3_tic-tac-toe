@@ -74,6 +74,10 @@ PROCESS_ROW
     ADD R4, R4, R0
     BRZ ROW_IS_C
 
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+
     BR INPUT_ERROR
 
 ; convert ASCII to number
@@ -103,6 +107,11 @@ PROCESS_COLUMN
     ADD R4, R4, R0
     BRZ COL_IS_3
     
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+    ADD R6, R6, #1   ; Increment stack pointer
+
     BR INPUT_ERROR
 
 ; Row/Col starts at 0 goes to 2
@@ -142,3 +151,47 @@ COL_IS_3
     LD R3, REF4_SELECTED_COLUMN
     STR R2, R3, #0
     RET
+
+REF_SINGLE_PLAYER .FILL SINGLE_PLAYER
+REF_LOG_SELECT_PLAYERS .FILL LOG_SELECT_PLAYERS
+REF_LOG_INVALID_PLAYER_SELECTION .FILL LOG_INVALID_PLAYER_SELECTION
+REF1_LOG_EMPTY_LINE .FILL LOG_EMPTY_LINE
+PLAYER_SELECT:
+    LD R0, REF_LOG_SELECT_PLAYERS  ; Load the address of the prompt string into R0
+    PUTS            ; Write the string to the console
+
+    GETC            ; Read a character from the keyboard
+    OUT             ; Echo the character
+    ADD R0, R0, #-16 ; Convert ASCII to integer (assuming input is '1' or '2') (subtract 48)
+    ADD R0, R0, #-16
+    ADD R0, R0, #-16
+
+    ; Check if input is valid (1 or 2)
+    ADD R1, R0, #-1  ; Subtract 1 from input
+    BRz SELECT_ONE_PLAYER ; If zero, input is 1
+    ADD R1, R0, #-2  ; Subtract 2 from input
+    BRz SELECT_TWO_PLAYER ; If zero, input is 2
+
+    ; If input is not valid, loop back
+    LD R0, REF_LOG_INVALID_PLAYER_SELECTION
+    PUTS
+    BRnzp PLAYER_SELECT
+SELECT_ONE_PLAYER
+    AND R0, R0, #0
+    ADD R0, R0, #1
+    LD R1, REF_SINGLE_PLAYER
+    STR R0, R1, #0
+    LD R0, REF1_LOG_EMPTY_LINE
+    PUTS
+    PUTS
+    RET
+SELECT_TWO_PLAYER
+    AND R0, R0, #0
+    ADD R0, R0, #0
+    LD R1, REF_SINGLE_PLAYER
+    STR R0, R1, #0
+    LD R0, REF1_LOG_EMPTY_LINE
+    PUTS
+    PUTS
+    RET
+
