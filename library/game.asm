@@ -59,13 +59,57 @@ CHECK_WIN
     STR R7, R6, #0   ; Store R7 on the stack
 
     LD R0, CURRENT_PLAYER
+
+    ; Row A
     LD R1, TILE_A1
     LD R2, TILE_A2
     LD R3, TILE_A3
     JSR CHECK_MATCHING
     BRP WIN_OCCURED
-    AND R1, R1, #0
-    ADD R1, R1, #0
+    ; Row B
+    LD R1, TILE_B1
+    LD R2, TILE_B2
+    LD R3, TILE_B3
+    JSR CHECK_MATCHING
+    BRP WIN_OCCURED
+    ; Row C
+    LD R1, TILE_C1
+    LD R2, TILE_C2
+    LD R3, TILE_C3
+    JSR CHECK_MATCHING
+    BRP WIN_OCCURED
+
+    ; Col 1
+    LD R1, TILE_A1
+    LD R2, TILE_B1
+    LD R3, TILE_C1
+    JSR CHECK_MATCHING
+    BRP WIN_OCCURED
+    ; Col 2
+    LD R1, TILE_A2
+    LD R2, TILE_B2
+    LD R3, TILE_C2
+    JSR CHECK_MATCHING
+    BRP WIN_OCCURED
+    ; Col 3
+    LD R1, TILE_A3
+    LD R2, TILE_B3
+    LD R3, TILE_C3
+    JSR CHECK_MATCHING
+    BRP WIN_OCCURED
+
+    ; diagonal 1
+    LD R1, TILE_A1
+    LD R2, TILE_B2
+    LD R3, TILE_C3
+    JSR CHECK_MATCHING
+    BRP WIN_OCCURED
+    ; diagonal 2
+    LD R1, TILE_A3
+    LD R2, TILE_B2
+    LD R3, TILE_C1
+    JSR CHECK_MATCHING
+    BRP WIN_OCCURED
     
     ; Pop R7 off the stack
     LDR R7, R6, #0   ; Load R7 from the stack
