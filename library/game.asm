@@ -1,10 +1,35 @@
 
 
 GAME_LOOP
+    ; Push R7 onto the stack
+    ADD R6, R6, #-1  ; Decrement stack pointer
+    STR R7, R6, #0   ; Store R7 on the stack
+
+    JSR TWO_PLAYER_LOOP
+
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+    RET
+
+TWO_PLAYER_LOOP
+    ; Player 1
+    LD R0, PLAYER
+    ST R0, CURRENT_PLAYER
     JSR PROCESS_PLAYER_MOVE
     JSR PRINT_GAMEBOARD
-    BR GAME_LOOP
+    ; JSR CHECK_WIN
 
+    ; Player 2
+    LD R0, PLAYER_2
+    ST R0, CURRENT_PLAYER
+    JSR PROCESS_PLAYER_MOVE
+    JSR PRINT_GAMEBOARD
+    ; JSR CHECK_WIN
+
+    BR TWO_PLAYER_LOOP
+
+; Expects player to be passed in as variable CURRENT_PLAYER
 PROCESS_PLAYER_MOVE
     ; Push R7 onto the stack
     ADD R6, R6, #-1  ; Decrement stack pointer
@@ -19,7 +44,7 @@ PROCESS_PLAYER_MOVE
     JSR SELECT_TILE
     JSR CHECK_TILE_PLAYER
     ; Claim the untaken tile for our player
-    LD R0, PLAYER
+    LD R0, CURRENT_PLAYER
     JSR SET_TILE
 
     ; Pop R7 off the stack
@@ -27,7 +52,6 @@ PROCESS_PLAYER_MOVE
     ADD R6, R6, #1   ; Increment stack pointer
 
     RET
-
 
 ; REF_ variables are used to manage references to far away 
 ; strings so that we can overcome limitations with how 

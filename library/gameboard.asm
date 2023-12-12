@@ -28,6 +28,7 @@ SELECT_TILE
 
 ; Check if the tile is taken and act appropriately
 ; This method is for the player, the AI also uses CHECK_TILE
+; This method adds invalid input logging and will loop back to requesting input
 CHECK_TILE_PLAYER
     ; Push R7 onto the stack
     ADD R6, R6, #-1  ; Decrement stack pointer
@@ -81,38 +82,66 @@ SET_TILE
     STR R0, R1, #0            ; Store the value in R0 (PLAYER, AI, or EMPTY) at the selected tile address
     RET
 
-REF_TEMP_ADDR .FILL TEMP_ADDR
-REF_PLAYER .FILL PLAYER
-REF_AI .FILL AI
 REF_EMPTY .FILL EMPTY
+REF_PLAYER .FILL PLAYER
+REF_PLAYER_2 .FILL PLAYER_2
+REF_AI .FILL AI
 ; Print Tile Icon Subroutine
 ; R0 is used to pass the address of the tile
 PRINT_TILE_ICON
-    ST R0, TEMP_ADDR
-    LDI R2, TEMP_ADDR     ; Load the value of the tile (pointed by R0)
-    LD R3, PLAYER         ; Load the value representing the player
+    LDR R2, R1, #0 ; Load the value of the tile
+
+    LD R3, REF_PLAYER     ; Load the value representing Player 1
+    LDR R3, R3, #0        ; Have to perform a second load since it's a REF_
     NOT R3, R3            ; Invert for comparison
     ADD R3, R3, #1        ; Add 1 to the inverted player value (2's complement)
     ADD R2, R2, R3        ; Compare tile with player
     BRZ PRINT_PLAYER_ICON ; Branch if tile is owned by player
-    LD R3, AI             ; Load the value representing the AI
+
+    LDR R2, R1, #0 ; Load the value of the tile
+
+    LD R3, REF_PLAYER_2     ; Load the value representing Player 2
+    LDR R3, R3, #0
+    NOT R3, R3              ; Invert for comparison
+    ADD R3, R3, #1          ; Add 1 to the inverted AI's value for 2's complement
+    ADD R2, R2, R3          ; Compare tile with AI
+    BRZ PRINT_PLAYER_2_ICON ; Branch if tile is owned by AI
+
+    LDR R2, R1, #0 ; Load the value of the tile
+
+    LD R3, REF_AI         ; Load the value representing the AI
+    LDR R3, R3, #0
     NOT R3, R3            ; Invert for comparison
     ADD R3, R3, #1        ; Add 1 to the inverted AI's value for 2's complement
     ADD R2, R2, R3        ; Compare tile with AI
     BRZ PRINT_AI_ICON     ; Branch if tile is owned by AI
-    LEA R0, EMPTY_ICON    ; Load the address of empty icon
-    BRNZP PRINT_ICON      ; Go to print the icon
+
+    LD R0, REF_EMPTY_ICON    ; Load the address of empty icon
+    PUTS
+    RET
+
+REF_EMPTY_ICON .FILL EMPTY_ICON
+REF_PLAYER_ICON .FILL PLAYER_ICON
+REF_PLAYER_2_ICON .FILL PLAYER_2_ICON
+REF_AI_ICON .FILL AI_ICON
 
 PRINT_PLAYER_ICON
-    LEA R0, PLAYER_ICON   ; Load the address of player icon
-    BR PRINT_ICON         ; Go to print the icon
+    LD R0, REF_PLAYER_ICON   ; Load the address of player 1 icon
+    PUTS
+    RET
+
+LEA R0, PLAYER_ICON
+PUTS
+
+PRINT_PLAYER_2_ICON
+    LD R0, REF_PLAYER_2_ICON   ; Load the address of player 2 icon
+    PUTS
+    RET
 
 PRINT_AI_ICON
-    LEA R0, AI_ICON       ; Load the address of AI icon
-
-PRINT_ICON
-    PUTS                  ; Print the icon
-    RET                   ; Return from subroutine
+    LD R0, REF_AI_ICON       ; Load the address of AI icon
+    PUTS
+    RET
 
 ; Gameboard Layout
 ;     1     2     3
@@ -154,26 +183,26 @@ PRINT_GAMEBOARD
     ; Print out all of the gameboard text
     LD R0, REF_COL_LABELS
     PUTS
-    
+
     JSR PRINT_NEW_LINE
 
     ; Print Row A
     LD R0, REF_START_ROW_A
     PUTS
 
-    LD R0, REF_TILE_A1
+    LD R1, REF_TILE_A1
     JSR PRINT_TILE_ICON
 
     LD R0, REF_MID_ROW
     PUTS
 
-    LD R0, REF_TILE_A2
+    LD R1, REF_TILE_A2
     JSR PRINT_TILE_ICON
 
     LD R0, REF_MID_ROW
     PUTS
 
-    LD R0, REF_TILE_A3
+    LD R1, REF_TILE_A3
     JSR PRINT_TILE_ICON
 
     LD R0, REF_END_ROW
@@ -187,19 +216,19 @@ PRINT_GAMEBOARD
     LD R0, REF_START_ROW_B
     PUTS
 
-    LD R0, REF_TILE_B1
+    LD R1, REF_TILE_B1
     JSR PRINT_TILE_ICON
 
     LD R0, REF_MID_ROW
     PUTS
 
-    LD R0, REF_TILE_B2
+    LD R1, REF_TILE_B2
     JSR PRINT_TILE_ICON
 
     LD R0, REF_MID_ROW
     PUTS
 
-    LD R0, REF_TILE_B3
+    LD R1, REF_TILE_B3
     JSR PRINT_TILE_ICON
 
     LD R0, REF_END_ROW
@@ -214,19 +243,19 @@ PRINT_GAMEBOARD
     LD R0, REF_START_ROW_C
     PUTS
 
-    LD R0, REF_TILE_C1
+    LD R1, REF_TILE_C1
     JSR PRINT_TILE_ICON
 
     LD R0, REF_MID_ROW
     PUTS
 
-    LD R0, REF_TILE_C2
+    LD R1, REF_TILE_C2
     JSR PRINT_TILE_ICON
 
     LD R0, REF_MID_ROW
     PUTS
 
-    LD R0, REF_TILE_C3
+    LD R1, REF_TILE_C3
     JSR PRINT_TILE_ICON
 
     LD R0, REF_END_ROW

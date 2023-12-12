@@ -10,6 +10,8 @@ SELECTED_COLUMN .FILL #0  ; Latest inputed column number
 SELECTED_TILE_ADDR .FILL #0 ; The tile address that the Player/AI selected to place a tile
 TILE_STATUS .FILL #0
 
+CURRENT_PLAYER .FILL #0
+
 ; Gameboard tiles
 ; Each tile can be 0 (empty), 1 (player 1), or 2 (player 2/AI)
 TILE_A1 .FILL #0
@@ -32,10 +34,10 @@ PLAYER    .FILL #1
 PLAYER_2  .FILL #2
 AI        .FILL #3
 ; Output Constants
+EMPTY_ICON    .STRINGZ " "
 PLAYER_ICON   .STRINGZ "X"
 PLAYER_2_ICON .STRINGZ "O"
 AI_ICON       .STRINGZ "∞"
-EMPTY_ICON    .STRINGZ " "
 ; Input constants
 ROW_A   .STRINGZ "A"
 ROW_B   .STRINGZ "B"
