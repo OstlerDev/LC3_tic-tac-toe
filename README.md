@@ -26,3 +26,180 @@ Players make moves by selecting a row (A, B, C) and a column (1, 2, 3). For exam
     b. `mv simulator lc3-simulator`
 4. Modify the path to your lc3tools binary folder inside `run_terminal.sh`
 5. Run the program using `./run_terminal.sh`
+
+## Example Game Output
+```
+Hello,
+Would you like to play a game of Tic-Tac-Toe?
+
+Enter 1 for one-player mode, 2 for two-player mode: 1
+
+     1   2   3  
+
+ A     │   │    
+    ───┼───┼─── 
+ B     │   │    
+    ───┼───┼─── 
+ C     │   │    
+
+Player 1: What space would you like to claim?
+A1
+     1   2   3  
+
+ A   X │   │    
+    ───┼───┼─── 
+ B     │   │    
+    ───┼───┼─── 
+ C     │   │    
+
+AI Player: * you can hear someone quietly typing behind a curtain to your right *
+B2
+     1   2   3  
+
+ A   X │   │    
+    ───┼───┼─── 
+ B     │ ∞ │    
+    ───┼───┼─── 
+ C     │   │    
+
+Player 1: What space would you like to claim?
+C3
+     1   2   3  
+
+ A   X │   │    
+    ───┼───┼─── 
+ B     │ ∞ │    
+    ───┼───┼─── 
+ C     │   │ X  
+
+AI Player: *beep-boop* *scratch-head* *ponder*
+A3
+     1   2   3  
+
+ A   X │   │ ∞  
+    ───┼───┼─── 
+ B     │ ∞ │    
+    ───┼───┼─── 
+ C     │   │ X  
+
+Player 1: What space would you like to claim?
+C1
+     1   2   3  
+
+ A   X │   │ ∞  
+    ───┼───┼─── 
+ B     │ ∞ │    
+    ───┼───┼─── 
+ C   X │   │ X  
+
+AI Player: *peek-behind-curtain* *whisper-to-invisible-advisor* *nod-earnestly*
+B1
+     1   2   3  
+
+ A   X │   │ ∞  
+    ───┼───┼─── 
+ B   ∞ │ ∞ │    
+    ───┼───┼─── 
+ C   X │   │ X  
+
+Player 1: What space would you like to claim?
+C2
+     1   2   3  
+
+ A   X │   │ ∞  
+    ───┼───┼─── 
+ B   ∞ │ ∞ │    
+    ───┼───┼─── 
+ C   X │ X │ X  
+
+
+ You Won! You have bested me, care to push your luck...? 
+
+
+     1   2   3  
+
+ A     │   │    
+    ───┼───┼─── 
+ B     │   │    
+    ───┼───┼─── 
+ C     │   │    
+
+Player 1: What space would you like to claim?
+V
+That is not a valid input, please select a Row and Column using the Letter and Numbers for each column.
+Here are some example inputs:
+A3
+C1
+B2
+
+Player 1: What space would you like to claim?
+B2
+     1   2   3  
+
+ A     │   │    
+    ───┼───┼─── 
+ B     │ X │    
+    ───┼───┼─── 
+ C     │   │    
+
+AI Player: *shuffle-cards* *peeks-at-hand* shuffles-again*
+A1
+     1   2   3  
+
+ A   ∞ │   │    
+    ───┼───┼─── 
+ B     │ X │    
+    ───┼───┼─── 
+ C     │   │    
+
+Player 1: What space would you like to claim?
+V
+That is not a valid input, please select a Row and Column using the Letter and Numbers for each column.
+Here are some example inputs:
+A3
+C1
+B2
+
+Player 1: What space would you like to claim?
+C1
+     1   2   3  
+
+ A   ∞ │   │    
+    ───┼───┼─── 
+ B     │ X │    
+    ───┼───┼─── 
+ C   X │   │    
+
+AI Player: *sneak-behind-curtain* *muffled-conversation* *reappear-with-confidence*
+A3
+     1   2   3  
+
+ A   ∞ │   │ ∞  
+    ───┼───┼─── 
+ B     │ X │    
+    ───┼───┼─── 
+ C   X │   │    
+
+Player 1: What space would you like to claim?
+C3
+     1   2   3  
+
+ A   ∞ │   │ ∞  
+    ───┼───┼─── 
+ B     │ X │    
+    ───┼───┼─── 
+ C   X │   │ X  
+
+AI Player: *tap-dance* *spin* *freeze-in-pose*
+A2
+     1   2   3  
+
+ A   ∞ │ ∞ │ ∞  
+    ───┼───┼─── 
+ B     │ X │    
+    ───┼───┼─── 
+ C   X │   │ X  
+
+
+ You LOST, better luck next time!  
+```
