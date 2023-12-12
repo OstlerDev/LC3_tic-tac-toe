@@ -1,13 +1,17 @@
 
 
+REF_SELECTED_ROW .FILL SELECTED_ROW
+REF_SELECTED_COLUMN .FILL SELECTED_COLUMN
+REF_SELECTED_TILE_ADDR .FILL SELECTED_TILE_ADDR
+
 SELECT_TILE
     ; Push R7 onto the stack
     ADD R6, R6, #-1  ; Decrement stack pointer
     STR R7, R6, #0   ; Store R7 on the stack
 
-    LEA R4, SELECTED_ROW      ; Load the address of the selected row
+    LD R4, REF_SELECTED_ROW      ; Load the address of the selected row
     LDR R1, R4, #0            ; Load the selected row number into R1
-    LEA R4, SELECTED_COLUMN   ; Load the address of the selected column
+    LD R4, REF_SELECTED_COLUMN   ; Load the address of the selected column
     LDR R2, R4, #0            ; Load the selected column number into R2
 
     ; Call the multiplication subroutine to multiply row index by 3
@@ -15,16 +19,20 @@ SELECT_TILE
 
     ; Calculate the address offset based on row and column
     ADD R1, R1, R2            ; Add the column index to the row index
-    LEA R3, TILE_A1           ; Load the starting address of tiles into R3
+    LD R3, REF_TILE_A1       ; Load the starting address of tiles into R3
     ADD R3, R3, R1            ; Add this offset to the base address
 
     ; R3 now contains the memory address of the selected tile
-    ST R3, SELECTED_TILE_ADDR ; Store it in SELECTED_TILE_ADDR for later use
+    LD R4, REF_SELECTED_TILE_ADDR
+    STR R3, R4, #0 ; Store it in SELECTED_TILE_ADDR for later use
 
     ; Pop R7 off the stack
     LDR R7, R6, #0   ; Load R7 from the stack
     ADD R6, R6, #1   ; Increment stack pointer
     RET
+
+
+REF_TILE_STATUS .FILL TILE_STATUS
 
 ; Check if the tile is taken and act appropriately
 ; This method is for the player, the AI also uses CHECK_TILE
@@ -39,7 +47,8 @@ CHECK_TILE_PLAYER
     ; Check if tile is taken
     ; 0 = taken
     ; 1 = available
-    LD R3, TILE_STATUS
+    LD R3, REF_TILE_STATUS
+    LDR R3, R3, #0
     ADD R3, R3, #-1
     BRN INPUT_ERROR_TILE_NOT_AVAILABLE
 
@@ -56,10 +65,12 @@ CHECK_TILE_PLAYER
 ; 0 = taken
 ; 1 = available
 CHECK_TILE
-    LD R0, SELECTED_TILE_ADDR ; Load the address of the selected tile
+    LD R0, REF_SELECTED_TILE_ADDR ; Load the address of the selected tile
+    LDR R0, R0, #0
     LDR R1, R0, #0            ; Load the value at the selected tile address
 
-    LD R2, EMPTY              ; Load the value representing an empty tile
+    LD R2, REF_EMPTY          ; Load the value representing an empty tile
+    LDR R2, R2, #0
     NOT R3, R1                ; Invert the value at the tile
     ADD R3, R3, #1            ; Add 1 to the inverted value (2's complement)
     ADD R3, R3, R2            ; Add inverted value and EMPTY
@@ -67,18 +78,22 @@ CHECK_TILE
 
     ; Tile is not available
     AND R3, R3, #0            ; Set R3 to 0 (tile not available)
-    ST R3, TILE_STATUS        ; Store the status (0) in TILE_STATUS
+    LD R4, REF_TILE_STATUS
+    STR R3, R4, #0 ; Store it in SELECTED_TILE_ADDR for later use
     RET
 
 TILE_AVAILABLE
     AND R3, R3, #0
     ADD R3, R3, #1
-    ST R2, SELECTED_COLUMN
-    ST R3, TILE_STATUS        ; Store the status (1) in TILE_STATUS
+    LD R4, REF_SELECTED_COLUMN
+    STR R2, R4, #0 
+    LD R4, REF_TILE_STATUS
+    STR R3, R4, #0 ; Store the status (1) in TILE_STATUS
     RET
 
 SET_TILE
-    LD R1, SELECTED_TILE_ADDR ; Load the address of the selected tile
+    LD R1, REF_SELECTED_TILE_ADDR ; Load the address of the selected tile
+    LDR R1, R1, #0
     STR R0, R1, #0            ; Store the value in R0 (PLAYER, AI, or EMPTY) at the selected tile address
     RET
 
