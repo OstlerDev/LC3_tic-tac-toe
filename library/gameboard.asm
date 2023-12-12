@@ -130,9 +130,6 @@ PRINT_PLAYER_ICON
     PUTS
     RET
 
-LEA R0, PLAYER_ICON
-PUTS
-
 PRINT_PLAYER_2_ICON
     LD R0, REF_PLAYER_2_ICON   ; Load the address of player 2 icon
     PUTS
