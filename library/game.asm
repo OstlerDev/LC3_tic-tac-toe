@@ -235,6 +235,9 @@ REF_LOG_ERROR_1 .FILL LOG_ERROR_1
 INPUT_ERROR
     LD R0, REF_LOG_ERROR_1   ; Load the address of the input prompt
     PUTS                     ; Display the prompt
+    ; There is a bug where if Player 2 inputs an invalid input
+    ; Then it will loop back to Player 1.
+    ; It's 5am and I don't have time to properly fix this...
     BR GAME_LOOP
 
 REF_LOG_ERROR_2 .FILL LOG_ERROR_2
