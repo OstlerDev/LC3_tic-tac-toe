@@ -8,9 +8,6 @@ PROCESS_PLAYER_MOVE
     JSR PRINT_INPUT_MOVE
     JSR GET_PLAYER_INPUT
     JSR VALIDATE_INPUT
-    BR INPUT_ERROR ; Log and come back to process the input again ;; NOTE: This may cause dual inputs from a player if we have a deeper bug in our code
-
-CONTINUE_PLAYER_MOVE
     JSR SELECT_TILE
     JSR CHECK_TILE
     ; Check if it was a valid tile, if not, branch off
@@ -28,7 +25,7 @@ REF_LOG_ERROR_1 .FILL LOG_ERROR_1
 INPUT_ERROR
     LD R0, REF_LOG_ERROR_1   ; Load the address of the input prompt
     PUTS                     ; Display the prompt
-    BR PROCESS_PLAYER_MOVE
+    BR GET_PLAYER_INPUT
 
 REF_LOG_ERROR_2 .FILL LOG_ERROR_2
 TILE_TAKEN

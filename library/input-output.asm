@@ -1,4 +1,11 @@
+; Repeat for COLUMN_INDEX
+; Variables and labels as needed
 
+VALIDATE_INPUT
+    JSR PROCESS_ROW
+    JSR PROCESS_COLUMN
+
+    RET
 
 GET_PLAYER_INPUT
     GETC                     ; Read a character (row)
@@ -9,14 +16,7 @@ GET_PLAYER_INPUT
     ST R0, PLAYER_COLUMN     ; Store the column character
     RET                      ; Return from subroutine
 
-; Compare R0 to R1
-CHECK_MATCH
-    NOT R4, R1
-    ADD R4, R4, #1            ; Add 1 to the inverted value (2's complement)
-    ADD R4, R4, R0
-    RET
-
-; Subroutine to convert ASCII characters to indices based on explicit matching
+; convert ASCII to number
 PROCESS_ROW
     LEA R4, PLAYER_ROW
     LDR R0, R4, #0          ; Load the selected row
@@ -24,69 +24,83 @@ PROCESS_ROW
     ; Compare Row Character
     LEA R4, ROW_A
     LDR R1, R4, #0          ; Load the selected row
-    JSR CHECK_MATCH
+    NOT R4, R1
+    ADD R4, R4, #1            ; Add 1 to the inverted value (2's complement)
+    ADD R4, R4, R0
     BRZ ROW_IS_A
     LEA R4, ROW_B
     LDR R1, R4, #0          ; Load the selected row
-    JSR CHECK_MATCH
+    NOT R4, R1
+    ADD R4, R4, #1            ; Add 1 to the inverted value (2's complement)
+    ADD R4, R4, R0
     BRZ ROW_IS_B
     LEA R4, ROW_C
     LDR R1, R4, #0          ; Load the selected row
-    JSR CHECK_MATCH
+    NOT R4, R1
+    ADD R4, R4, #1            ; Add 1 to the inverted value (2's complement)
+    ADD R4, R4, R0
     BRZ ROW_IS_C
 
-    BR INPUT_ERROR
+    LEA R4, SELECTED_ROW     ; Check if we matched a row, if not, branch to input error
+    LDR R2, R4, #0
+    ADD R2, R2, #0
+    BRZ INPUT_ERROR
 
-; Subroutine to convert ASCII characters to indices based on explicit matching
+    RET
+
+; convert ASCII to number
 PROCESS_COLUMN
     LEA R4, PLAYER_COLUMN
-    LDR R0, R4, #0          ; Load the selected row
+    LDR R0, R4, #0          ; Load the selected col
 
     ; Compare Row Character
     LEA R4, COL_1
-    LDR R1, R4, #0          ; Load the selected row
-    JSR CHECK_MATCH
+    LDR R1, R4, #0          ; Load the selected col
+    NOT R4, R1
+    ADD R4, R4, #1            ; Add 1 to the inverted value (2's complement)
+    ADD R4, R4, R0
     BRZ COL_IS_1
     LEA R4, COL_2
-    LDR R1, R4, #0          ; Load the selected row
-    JSR CHECK_MATCH
+    LDR R1, R4, #0          ; Load the selected col
+    NOT R4, R1
+    ADD R4, R4, #1            ; Add 1 to the inverted value (2's complement)
+    ADD R4, R4, R0
     BRZ COL_IS_2
     LEA R4, COL_3
-    LDR R1, R4, #0          ; Load the selected row
-    JSR CHECK_MATCH
+    LDR R1, R4, #0          ; Load the selected col
+    NOT R4, R1
+    ADD R4, R4, #1            ; Add 1 to the inverted value (2's complement)
+    ADD R4, R4, R0
     BRZ COL_IS_3
     
-    BR INPUT_ERROR
+    LEA R4, SELECTED_COLUMN  ; Check if we matched a col, if not, branch to input error
+    LDR R2, R4, #0
+    ADD R2, R2, #0
+    BRZ INPUT_ERROR
+
+    RET
 
 ROW_IS_A
-	AND R0, R0, #1
-    ST R0, SELECTED_ROW
-    BR PROCESS_COLUMN
+    AND R2, R2, #1
+    ST R2, SELECTED_ROW
+    RET
 ROW_IS_B
-	AND R0, R0, #2
-    ST R0, SELECTED_ROW
-    BR PROCESS_COLUMN
+    AND R2, R2, #2
+    ST R2, SELECTED_ROW
+    RET
 ROW_IS_C
-	AND R0, R0, #3
-    ST R0, SELECTED_ROW
-    BR PROCESS_COLUMN
+    AND R2, R2, #3
+    ST R2, SELECTED_ROW
+    RET
 COL_IS_1
-	AND R0, R0, #1
-    ST R0, SELECTED_COLUMN
-    BR CONTINUE_PLAYER_MOVE
+    AND R2, R2, #1
+    ST R2, SELECTED_COLUMN
+    RET
 COL_IS_2
-	AND R0, R0, #2
-    ST R0, SELECTED_COLUMN
-    BR CONTINUE_PLAYER_MOVE
+    AND R2, R2, #2
+    ST R2, SELECTED_COLUMN
+    RET
 COL_IS_3
-	AND R0, R0, #3
-    ST R0, SELECTED_COLUMN
-    BR CONTINUE_PLAYER_MOVE
-
-; Repeat for COLUMN_INDEX
-; Variables and labels as needed
-
-VALIDATE_INPUT
-    JSR PROCESS_ROW
-    JSR PROCESS_COLUMN
+    AND R2, R2, #3
+    ST R2, SELECTED_COLUMN
     RET
