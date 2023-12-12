@@ -1,24 +1,59 @@
 
 
 SELECT_TILE
-    LEA R4, SELECTED_ROW
-    LDR R2, R4, #0          ; Load the selected row
-    LEA R4, SELECTED_COLUMN
-    LDR R3, R4, #0          ; Load the selected column
+    ; Push R7 onto the stack
+    ADD R6, R6, #-1  ; Decrement stack pointer
+    STR R7, R6, #0   ; Store R7 on the stack
 
-    ; Calculate tile address based on row and column
-    LEA R4, TILE_A1           ; Load the starting address of tiles
-    ADD R2, R2, R2            ; Double the row index (as each row has 3 columns)
-    ADD R2, R2, R3            ; Add the column index
-    ADD R4, R4, R2            ; Add this offset to the base address
-    ST R4, TEMP_ADDR
-    LDI R5, TEMP_ADDR         ; Load the value of the selected tile into R5 
+    LEA R4, SELECTED_ROW      ; Load the address of the selected row
+    LDR R1, R4, #0            ; Load the selected row number into R1
+    LEA R4, SELECTED_COLUMN   ; Load the address of the selected column
+    LDR R2, R4, #0            ; Load the selected column number into R2
 
-    ; R5 now contains the memory address of the selected tile
-    ST R5, SELECTED_TILE_ADDR ; Store it for later use
+    ; Call the multiplication subroutine to multiply row index by 3
+    JSR MULT_BY_THREE         ; R1 will contain row index * 3 after this call
+
+    ; Calculate the address offset based on row and column
+    ADD R1, R1, R2            ; Add the column index to the row index
+    LEA R3, TILE_A1           ; Load the starting address of tiles into R3
+    ADD R3, R3, R1            ; Add this offset to the base address
+
+    ; R3 now contains the memory address of the selected tile
+    ST R3, SELECTED_TILE_ADDR ; Store it in SELECTED_TILE_ADDR for later use
+
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+    RET
+
+; Check if the tile is taken and act appropriately
+; This method is for the player, the AI also uses CHECK_TILE
+CHECK_TILE_PLAYER
+    ; Push R7 onto the stack
+    ADD R6, R6, #-1  ; Decrement stack pointer
+    STR R7, R6, #0   ; Store R7 on the stack
+
+    JSR CHECK_TILE   ; Check if tile is taken, will store in TILE_STATUS
+
+    ; Check if tile is taken
+    ; 0 = taken
+    ; 1 = available
+    LD R3, TILE_STATUS
+    ADD R3, R3, #-1
+    BRN INPUT_ERROR_TILE_NOT_AVAILABLE
+
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+
     RET
 
 ; Subroutine to check if the selected tile is available
+; This is used extensively throughout the code!
+; Please do not break it <3 -Sky
+; TILE_STATUS
+; 0 = taken
+; 1 = available
 CHECK_TILE
     LD R0, SELECTED_TILE_ADDR ; Load the address of the selected tile
     LDR R1, R0, #0            ; Load the value at the selected tile address
@@ -35,7 +70,9 @@ CHECK_TILE
     RET
 
 TILE_AVAILABLE
-    LD R3, #1                 ; Set R3 to 1 (tile available)
+    AND R3, R3, #0
+    ADD R3, R3, #1
+    ST R2, SELECTED_COLUMN
     ST R3, TILE_STATUS        ; Store the status (1) in TILE_STATUS
     RET
 
