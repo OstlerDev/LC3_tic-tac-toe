@@ -43,8 +43,8 @@ LOG_BOT_7 .STRINGZ "HAHA YOU FOOL! PREPARE TO BEATEN AGAIN BY THE GREAT SKYBOT!\
 LOG_INPUT_1 .STRINGZ "What space would you like to claim?\n"
 LOG_INPUT_2 .STRINGZ "Have you come back for more pain and misory? (y/n)\n"
 
-LOG_ERROR_1 .STRINGZ "That is not a valid input, please select a Row and Column using the Letter and Numbers for each column.\nHere are some example inputs:\nA3\nC1\nB2\n\n"
-LOG_ERROR_2 .STRINGZ "That space has already been claimed, please select a different one.\n"
+LOG_ERROR_1 .STRINGZ "\nThat is not a valid input, please select a Row and Column using the Letter and Numbers for each column.\nHere are some example inputs:\nA3\nC1\nB2\n\n"
+LOG_ERROR_2 .STRINGZ "\nThat space has already been claimed, please select a different one.\n\n"
 
 LOG_BOT_X .STRINGZ "HAHA?\n"
 
