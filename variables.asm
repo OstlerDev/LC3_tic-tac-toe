@@ -23,6 +23,7 @@ TILE_C2 .FILL #0
 TILE_C3 .FILL #0
 ; Helper Variable
 TEMP_ADDR .FILL #0    ; Temporary storage for loading registers easily
+STACK_PTR .FILL xFDFF
 
 ; CONSTANTS
 ;

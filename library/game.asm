@@ -5,6 +5,10 @@
 ; They store the memory location of the string that we want to use.
 
 PROCESS_PLAYER_MOVE
+    ; Push R7 onto the stack
+    ADD R6, R6, #-1  ; Decrement stack pointer
+    STR R7, R6, #0   ; Store R7 on the stack
+
     JSR PRINT_INPUT_MOVE
     JSR GET_PLAYER_INPUT
     JSR VALIDATE_INPUT
@@ -13,6 +17,11 @@ PROCESS_PLAYER_MOVE
     ; Check if it was a valid tile, if not, branch off
     ; BRz TILE_TAKEN
     JSR SET_TILE
+
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+    
     RET
 
 REF_LOG_INPUT_1 .FILL LOG_INPUT_1
