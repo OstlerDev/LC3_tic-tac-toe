@@ -16,6 +16,8 @@ START_ROW_A    .STRINGZ " A   "
 START_ROW_B    .STRINGZ " B   "
 START_ROW_C    .STRINGZ " C   "
 
+LOG_WIN  .STRINGZ "\n You Won! \n\n\n"
+
 LOG_EMPTY_LINE  .STRINGZ "\n"
 LOG_BOT_THINK_1 .STRINGZ "bzzzz... *Beep* *boop* *zzz* *beep* *zap*"
 LOG_BOT_THINK_2 .STRINGZ "*whrrr* *buzzzz* *burp*"

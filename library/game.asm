@@ -18,14 +18,14 @@ TWO_PLAYER_LOOP
     ST R0, CURRENT_PLAYER
     JSR PROCESS_PLAYER_MOVE
     JSR PRINT_GAMEBOARD
-    ; JSR CHECK_WIN
+    JSR CHECK_WIN
 
     ; Player 2
     LD R0, PLAYER_2
     ST R0, CURRENT_PLAYER
     JSR PROCESS_PLAYER_MOVE
     JSR PRINT_GAMEBOARD
-    ; JSR CHECK_WIN
+    JSR CHECK_WIN
 
     BR TWO_PLAYER_LOOP
 
@@ -53,6 +53,25 @@ PROCESS_PLAYER_MOVE
 
     RET
 
+CHECK_WIN
+    ; Push R7 onto the stack
+    ADD R6, R6, #-1  ; Decrement stack pointer
+    STR R7, R6, #0   ; Store R7 on the stack
+
+    LD R0, CURRENT_PLAYER
+    LD R1, TILE_A1
+    LD R2, TILE_A2
+    LD R3, TILE_A3
+    JSR CHECK_MATCHING
+    BRP WIN_OCCURED
+    AND R1, R1, #0
+    ADD R1, R1, #0
+    
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+    RET
+
 ; REF_ variables are used to manage references to far away 
 ; strings so that we can overcome limitations with how 
 ; far away LC3 can access the program memory from.
@@ -77,26 +96,8 @@ INPUT_ERROR_TILE_NOT_AVAILABLE
     PUTS                     ; Display the error message
     BR PROCESS_PLAYER_MOVE
 
-
-
-; player_loop
-
-    ; get valid input from user
-
-    ; update gameboard with the newly claimed tile
-
-    ; check if player won
-
-    ; branch to player_win, or branch to opponent loop
-
-    ; print gameboard
-
-; opponent_loop
-
-    ; use ai-opponent to decide best move
-
-    ; claim tile selected
-
-    ; check for win states
-
-    ; branch to player_loss, or branch back to player_loop to keep going
+REF_LOG_WIN .FILL LOG_WIN
+WIN_OCCURED
+    LD R0, REF_LOG_WIN
+    PUTS
+    HALT

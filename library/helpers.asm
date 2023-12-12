@@ -1,3 +1,10 @@
+
+REF_LOG_EMPTY_LINE .FILL LOG_EMPTY_LINE
+PRINT_NEW_LINE
+    LD R0, REF_LOG_EMPTY_LINE   ; Load the address of the input prompt
+    PUTS                     ; Display the prompt
+    RET
+
 ; Subroutine to multiply a number in R1 by 3
 MULT_BY_THREE
     ; Push R7 onto the stack
@@ -22,8 +29,33 @@ MULT_LOOP
 
     RET
 
-REF_LOG_EMPTY_LINE .FILL LOG_EMPTY_LINE
-PRINT_NEW_LINE
-    LD R0, REF_LOG_EMPTY_LINE   ; Load the address of the input prompt
-    PUTS                     ; Display the prompt
-    RET
+; CHECK_MATCHING subroutine
+; Assumptions: R0 = check_value, R1 = compare1, R2 = compare2, R3 = compare3
+; Returns: R4 = 1 if all match, 0 otherwise
+; Also leaves last stack operation as Positive or Zero for branch operations
+CHECK_MATCHING
+    ; Make R0 negative
+    NOT R0, R0
+    ADD R0, R0, #1 ; Add 1 2's comp
+
+    ; Compare check_value with compare1
+    ADD R4, R1, R0
+    BRnp NOT_MATCH  ; If not zero, values don't match, go to NOT_MATCH
+
+    ; Compare check_value with compare2
+    ADD R4, R2, R0
+    BRnp NOT_MATCH  ; If not zero, values don't match, go to NOT_MATCH
+
+    ; Compare check_value with compare3
+    ADD R4, R3, R0
+    BRnp NOT_MATCH  ; If not zero, values don't match, go to NOT_MATCH
+
+    ; If all match
+    AND R4, R4, #0  ; Clear R4
+    ADD R4, R4, #1  ; Set R4 to 1 (all values match)
+    RET             ; Return from subroutine
+
+NOT_MATCH
+    AND R4, R4, #0  ; Set R4 to 0 (no match)
+    ADD R4, R4, #0  ; Perform ADD so that we can branch later
+    RET             ; Return from subroutine
