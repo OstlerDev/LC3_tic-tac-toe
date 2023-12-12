@@ -32,7 +32,7 @@ SELECT_TILE
     RET
 
 
-REF_TILE_STATUS .FILL TILE_STATUS
+REF_INPUT_ERROR_TILE_NOT_AVAILABLE .FILL INPUT_ERROR_TILE_NOT_AVAILABLE
 
 ; Check if the tile is taken and act appropriately
 ; This method is for the player, the AI also uses CHECK_TILE
@@ -42,15 +42,8 @@ CHECK_TILE_PLAYER
     ADD R6, R6, #-1  ; Decrement stack pointer
     STR R7, R6, #0   ; Store R7 on the stack
 
-    JSR CHECK_TILE   ; Check if tile is taken, will store in TILE_STATUS
-
-    ; Check if tile is taken
-    ; 0 = taken
-    ; 1 = available
-    LD R3, REF_TILE_STATUS
-    LDR R3, R3, #0
-    ADD R3, R3, #-1
-    BRN INPUT_ERROR_TILE_NOT_AVAILABLE
+    JSR CHECK_TILE   ; Check if tile is taken
+    BRP PLAYER_TILE_NOT_AVAILABLE
 
     ; Pop R7 off the stack
     LDR R7, R6, #0   ; Load R7 from the stack
@@ -58,41 +51,37 @@ CHECK_TILE_PLAYER
 
     RET
 
+PLAYER_TILE_NOT_AVAILABLE
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+    BRP REF_INPUT_ERROR_TILE_NOT_AVAILABLE
+
 ; Subroutine to check if the selected tile is available
 ; This is used extensively throughout the code!
 ; Please do not break it <3 -Sky
-; TILE_STATUS
-; 0 = taken
-; 1 = available
 CHECK_TILE
     LD R0, REF_SELECTED_TILE_ADDR ; Load the address of the selected tile
-    LDR R0, R0, #0
-    LDR R1, R0, #0            ; Load the value at the selected tile address
+    LDR R0, R0, #0            ; Yes, we do have to do this twice.
+    LDR R0, R0, #0            ; Load the value at the selected tile address
 
-    LD R2, REF_EMPTY          ; Load the value representing an empty tile
-    LDR R2, R2, #0
-    NOT R3, R1                ; Invert the value at the tile
-    ADD R3, R3, #1            ; Add 1 to the inverted value (2's complement)
-    ADD R3, R3, R2            ; Add inverted value and EMPTY
+    LD R1, REF_EMPTY          ; Load the value representing an empty tile
+    LDR R1, R1, #0
+    NOT R0, R0                ; Invert the value at the tile
+    ADD R0, R0, #1            ; Add 1 to the inverted value (2's complement)
+    ADD R0, R0, R1            ; Add inverted value and EMPTY
     BRZ TILE_AVAILABLE        ; Branch if tile is empty
-
-    ; Tile is not available
-    AND R3, R3, #0            ; Set R3 to 0 (tile not available)
-    LD R4, REF_TILE_STATUS
-    STR R3, R4, #0 ; Store it in SELECTED_TILE_ADDR for later use
 
     AND R0, R0, #0
     ADD R0, R0, #0 ; Leave a zero op on the stack
     RET
 
 TILE_AVAILABLE
-    AND R3, R3, #0
-    ADD R3, R3, #1
-    LD R4, REF_SELECTED_COLUMN
-    STR R2, R4, #0 
-    LD R4, REF_TILE_STATUS
-    STR R3, R4, #0 ; Store the status (1) in TILE_STATUS
-
+    ; AND R3, R3, #0
+    ; ADD R3, R3, #1
+    ; Do I need this...?
+    ; LD R4, REF_SELECTED_COLUMN
+    ; STR R2, R4, #0 
     AND R0, R0, #0
     ADD R0, R0, #1 ; Leave a positive op on the stack
     RET

@@ -47,7 +47,7 @@ PROCESS_ROW
     ADD R4, R4, #1            ; Add 1 to the inverted value (2's complement)
     ADD R4, R4, R0
     BRZ ROW_IS_A
-    
+
     LEA R4, ROW_B
     LDR R1, R4, #0          ; Load the selected row
     NOT R4, R1

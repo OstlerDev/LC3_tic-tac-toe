@@ -8,9 +8,10 @@ SELECTED_ROW .FILL #0      ; Latest inputed row number
 SELECTED_COLUMN .FILL #0  ; Latest inputed column number
 
 SELECTED_TILE_ADDR .FILL #0 ; The tile address that the Player/AI selected to place a tile
-TILE_STATUS .FILL #0
 
-CURRENT_PLAYER .FILL #0
+CURRENT_PLAYER  .FILL #0
+PREVIOUS_VALUE  .FILL #0
+PLAYER_TO_CHECK .FILL #0
 
 ; Gameboard tiles
 ; Each tile can be 0 (empty), 1 (player 1), or 2 (player 2/AI)
