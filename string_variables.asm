@@ -12,8 +12,8 @@
 ; C   X  #     #     
 ;        #     #     
 COL_LABELS     .STRINGZ "     1     2     3  \n"
-ROW_SPACE      .STRINGZ "        #     #     "
-ROW_DIVIDER    .STRINGZ "   #################\n"
+ROW_SPACE      .STRINGZ "        #     #     \n"
+ROW_DIVIDER    .STRINGZ "   ################# \n"
 MID_ROW        .STRINGZ "  #  "
 END_ROW        .STRINGZ "  \n"
 START_ROW_A    .STRINGZ " A   "

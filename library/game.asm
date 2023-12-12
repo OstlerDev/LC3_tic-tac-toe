@@ -1,5 +1,10 @@
 
 
+GAME_LOOP
+    JSR PROCESS_PLAYER_MOVE
+    JSR PRINT_GAMEBOARD
+    BR GAME_LOOP
+
 PROCESS_PLAYER_MOVE
     ; Push R7 onto the stack
     ADD R6, R6, #-1  ; Decrement stack pointer

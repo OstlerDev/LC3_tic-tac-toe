@@ -81,10 +81,10 @@ SET_TILE
     STR R0, R1, #0            ; Store the value in R0 (PLAYER, AI, or EMPTY) at the selected tile address
     RET
 
-PRINT_GAMEBOARD
-   ; Print out all of the gameboard text
-   RET
-
+REF_TEMP_ADDR .FILL TEMP_ADDR
+REF_PLAYER .FILL PLAYER
+REF_AI .FILL AI
+REF_EMPTY .FILL EMPTY
 ; Print Tile Icon Subroutine
 ; R0 is used to pass the address of the tile
 PRINT_TILE_ICON
@@ -113,3 +113,142 @@ PRINT_AI_ICON
 PRINT_ICON
     PUTS                  ; Print the icon
     RET                   ; Return from subroutine
+
+; Gameboard Layout
+;     1     2     3
+;        #     #     
+; A   X  #     #  O  
+;        #     #    
+;   #################
+;        #     #     
+; B      #  O  #     
+;        #     #     
+;   #################
+;        #     #     
+; C   X  #     #     
+;        #     #    
+
+REF_COL_LABELS .FILL COL_LABELS
+REF_ROW_SPACE .FILL ROW_SPACE
+REF_ROW_DIVIDER .FILL ROW_DIVIDER
+REF_MID_ROW .FILL MID_ROW
+REF_END_ROW .FILL END_ROW
+REF_START_ROW_A .FILL START_ROW_A
+REF_START_ROW_B .FILL START_ROW_B
+REF_START_ROW_C .FILL START_ROW_C
+
+REF_TILE_A1 .FILL TILE_A1
+REF_TILE_A2 .FILL TILE_A2
+REF_TILE_A3 .FILL TILE_A3
+REF_TILE_B1 .FILL TILE_B1
+REF_TILE_B2 .FILL TILE_B2
+REF_TILE_B3 .FILL TILE_B3
+REF_TILE_C1 .FILL TILE_C1
+REF_TILE_C2 .FILL TILE_C2
+REF_TILE_C3 .FILL TILE_C3
+
+PRINT_GAMEBOARD
+    ; Push R7 onto the stack
+    ADD R6, R6, #-1  ; Decrement stack pointer
+    STR R7, R6, #0   ; Store R7 on the stack
+
+    ; Print out all of the gameboard text
+    LD R0, REF_COL_LABELS
+    PUTS
+    LD R0, REF_ROW_SPACE
+    PUTS
+
+    ; Print Row A
+    LD R0, REF_START_ROW_A
+    PUTS
+
+    LD R0, REF_TILE_A1
+    JSR PRINT_TILE_ICON
+
+    LD R0, REF_MID_ROW
+    PUTS
+
+    LD R0, REF_TILE_A2
+    JSR PRINT_TILE_ICON
+
+    LD R0, REF_MID_ROW
+    PUTS
+
+    LD R0, REF_TILE_A3
+    JSR PRINT_TILE_ICON
+
+    LD R0, REF_END_ROW
+    PUTS
+
+    ; middle
+    LD R0, REF_ROW_SPACE
+    PUTS
+    LD R0, REF_ROW_DIVIDER
+    PUTS
+    LD R0, REF_ROW_SPACE
+    PUTS
+
+    ; Print Row B
+    LD R0, REF_START_ROW_B
+    PUTS
+
+    LD R0, REF_TILE_B1
+    JSR PRINT_TILE_ICON
+
+    LD R0, REF_MID_ROW
+    PUTS
+
+    LD R0, REF_TILE_B2
+    JSR PRINT_TILE_ICON
+
+    LD R0, REF_MID_ROW
+    PUTS
+
+    LD R0, REF_TILE_B3
+    JSR PRINT_TILE_ICON
+
+    LD R0, REF_END_ROW
+    PUTS
+
+
+    ; middle
+    LD R0, REF_ROW_SPACE
+    PUTS
+    LD R0, REF_ROW_DIVIDER
+    PUTS
+    LD R0, REF_ROW_SPACE
+    PUTS
+
+    ; Print Row C
+    LD R0, REF_START_ROW_C
+    PUTS
+
+    LD R0, REF_TILE_C1
+    JSR PRINT_TILE_ICON
+
+    LD R0, REF_MID_ROW
+    PUTS
+
+    LD R0, REF_TILE_C2
+    JSR PRINT_TILE_ICON
+
+    LD R0, REF_MID_ROW
+    PUTS
+
+    LD R0, REF_TILE_C3
+    JSR PRINT_TILE_ICON
+
+    LD R0, REF_END_ROW
+    PUTS
+
+    ; end
+    LD R0, REF_ROW_SPACE
+    PUTS
+
+    JSR PRINT_NEW_LINE
+
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+
+    RET
