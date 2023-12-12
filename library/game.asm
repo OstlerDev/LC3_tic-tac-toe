@@ -166,6 +166,19 @@ CHECK_WIN
     ADD R0, R0, #0   ; Leave a zero op as the last on the stack
     RET
 
+RESET_GAME
+    AND R0, R0, #0
+    ST R0, TILE_A1
+    ST R0, TILE_A2
+    ST R0, TILE_A3
+    ST R0, TILE_B1
+    ST R0, TILE_B2
+    ST R0, TILE_B3
+    ST R0, TILE_C1
+    ST R0, TILE_C2
+    ST R0, TILE_C3
+    BR GAME_LOOP
+
 ; REF_ variables are used to manage references to far away 
 ; strings so that we can overcome limitations with how 
 ; far away LC3 can access the program memory from.
@@ -200,4 +213,4 @@ REF_LOG_TIE .FILL LOG_TIE
 LOG_TIE_OCCURED
     LD R0, REF_LOG_TIE
     PUTS
-    HALT
+    JSR RESET_GAME
