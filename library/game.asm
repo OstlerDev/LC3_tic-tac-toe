@@ -5,7 +5,8 @@ GAME_LOOP
     ADD R6, R6, #-1  ; Decrement stack pointer
     STR R7, R6, #0   ; Store R7 on the stack
 
-    JSR TWO_PLAYER_LOOP
+    JSR SINGLE_PLAYER_LOOP
+    ; JSR TWO_PLAYER_LOOP
 
     ; Pop R7 off the stack
     LDR R7, R6, #0   ; Load R7 from the stack
@@ -19,6 +20,7 @@ TWO_PLAYER_LOOP
     JSR PROCESS_PLAYER_MOVE
     JSR PRINT_GAMEBOARD
     JSR CHECK_WIN
+    BRP LOG_WIN_OCCURED
 
     ; Player 2
     LD R0, PLAYER_2
@@ -26,8 +28,28 @@ TWO_PLAYER_LOOP
     JSR PROCESS_PLAYER_MOVE
     JSR PRINT_GAMEBOARD
     JSR CHECK_WIN
+    BRP LOG_WIN_OCCURED
 
     BR TWO_PLAYER_LOOP
+
+SINGLE_PLAYER_LOOP
+    ; Player 1
+    LD R0, PLAYER
+    ST R0, CURRENT_PLAYER
+    JSR PROCESS_PLAYER_MOVE
+    JSR PRINT_GAMEBOARD
+    JSR CHECK_WIN
+    BRP LOG_WIN_OCCURED
+
+    ; AI Player
+    LD R0, AI
+    ST R0, CURRENT_PLAYER
+    JSR AI_PROCESS_MOVE
+    JSR PRINT_GAMEBOARD
+    JSR CHECK_WIN
+    BRP LOG_WIN_OCCURED
+
+    BR SINGLE_PLAYER_LOOP
 
 ; Expects player to be passed in as variable CURRENT_PLAYER
 PROCESS_PLAYER_MOVE
@@ -44,13 +66,35 @@ PROCESS_PLAYER_MOVE
     JSR SELECT_TILE
     JSR CHECK_TILE_PLAYER
     ; Claim the untaken tile for our player
+    JSR CLAIM_TILE
+
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+
+    RET
+
+CLAIM_TILE
+    ; Push R7 onto the stack
+    ADD R6, R6, #-1  ; Decrement stack pointer
+    STR R7, R6, #0   ; Store R7 on the stack
+
+    ; Claim the untaken tile for our player
     LD R0, CURRENT_PLAYER
     JSR SET_TILE
 
     ; Pop R7 off the stack
     LDR R7, R6, #0   ; Load R7 from the stack
     ADD R6, R6, #1   ; Increment stack pointer
+    RET
 
+WIN_OCCURED
+    ; Pop R7 off the stack
+    LDR R7, R6, #0   ; Load R7 from the stack
+    ADD R6, R6, #1   ; Increment stack pointer
+
+    AND R0, R0, #0
+    ADD R0, R0, #1   ; Leave a positive op as the last on the stack
     RET
 
 CHECK_WIN
@@ -114,6 +158,9 @@ CHECK_WIN
     ; Pop R7 off the stack
     LDR R7, R6, #0   ; Load R7 from the stack
     ADD R6, R6, #1   ; Increment stack pointer
+
+    AND R0, R0, #0
+    ADD R0, R0, #0   ; Leave a zero op as the last on the stack
     RET
 
 ; REF_ variables are used to manage references to far away 
@@ -141,7 +188,7 @@ INPUT_ERROR_TILE_NOT_AVAILABLE
     BR PROCESS_PLAYER_MOVE
 
 REF_LOG_WIN .FILL LOG_WIN
-WIN_OCCURED
+LOG_WIN_OCCURED
     LD R0, REF_LOG_WIN
     PUTS
     HALT

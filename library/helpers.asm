@@ -34,20 +34,21 @@ MULT_LOOP
 ; Returns: R4 = 1 if all match, 0 otherwise
 ; Also leaves last stack operation as Positive or Zero for branch operations
 CHECK_MATCHING
-    ; Make R0 negative
-    NOT R0, R0
-    ADD R0, R0, #1 ; Add 1 2's comp
+    ; Make R5 negative
+    ADD R5, R0, #0
+    NOT R5, R5
+    ADD R5, R5, #1 ; Add 1 2's comp
 
     ; Compare check_value with compare1
-    ADD R4, R1, R0
+    ADD R4, R1, R5
     BRnp NOT_MATCH  ; If not zero, values don't match, go to NOT_MATCH
 
     ; Compare check_value with compare2
-    ADD R4, R2, R0
+    ADD R4, R2, R5
     BRnp NOT_MATCH  ; If not zero, values don't match, go to NOT_MATCH
 
     ; Compare check_value with compare3
-    ADD R4, R3, R0
+    ADD R4, R3, R5
     BRnp NOT_MATCH  ; If not zero, values don't match, go to NOT_MATCH
 
     ; If all match

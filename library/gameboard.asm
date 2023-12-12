@@ -80,6 +80,9 @@ CHECK_TILE
     AND R3, R3, #0            ; Set R3 to 0 (tile not available)
     LD R4, REF_TILE_STATUS
     STR R3, R4, #0 ; Store it in SELECTED_TILE_ADDR for later use
+
+    AND R0, R0, #0
+    ADD R0, R0, #0 ; Leave a zero op on the stack
     RET
 
 TILE_AVAILABLE
@@ -89,6 +92,9 @@ TILE_AVAILABLE
     STR R2, R4, #0 
     LD R4, REF_TILE_STATUS
     STR R3, R4, #0 ; Store the status (1) in TILE_STATUS
+
+    AND R0, R0, #0
+    ADD R0, R0, #1 ; Leave a positive op on the stack
     RET
 
 SET_TILE
