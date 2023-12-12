@@ -6,6 +6,7 @@ This LC-3 Tic-Tac-Toe program is an implementation of the classic game Tic-Tac-T
 Players make moves by selecting a row (A, B, C) and a column (1, 2, 3). For example, to select the top-right cell, the player would input "A3". The game alternates between the human player and the AI opponent, updating the gameboard after each turn.
 
 ## Gameplay Features
+- Single Player (with AI), and Two Player mode
 - Interactive input system for selecting grid positions.
 - Real-time updating of the gameboard after each move.
 - Intelligent AI opponent with a variety of strategies.
