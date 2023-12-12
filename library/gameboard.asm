@@ -51,9 +51,6 @@ CHECK_TILE_PLAYER
 REF_INPUT_ERROR_TILE_NOT_AVAILABLE .FILL INPUT_ERROR_TILE_NOT_AVAILABLE
 
 PLAYER_TILE_NOT_AVAILABLE
-    ; ; Pop R7 off the stack
-    ; LDR R7, R6, #0   ; Load R7 from the stack
-    ; ADD R6, R6, #1   ; Increment stack pointer
     LD R0, REF_INPUT_ERROR_TILE_NOT_AVAILABLE
     JMP R0
 
@@ -77,11 +74,6 @@ CHECK_TILE
     RET
 
 TILE_AVAILABLE
-    ; AND R3, R3, #0
-    ; ADD R3, R3, #1
-    ; Do I need this...?
-    ; LD R4, REF_SELECTED_COLUMN
-    ; STR R2, R4, #0 
     AND R0, R0, #0
     ADD R0, R0, #1 ; Leave a positive op on the stack
     RET
@@ -150,19 +142,14 @@ PRINT_AI_ICON
     PUTS
     RET
 
-; Gameboard Layout
-;     1     2     3
-;        #     #     
-; A   X  #     #  O  
-;        #     #    
-;   #################
-;        #     #     
-; B      #  O  #     
-;        #     #     
-;   #################
-;        #     #     
-; C   X  #     #     
-;        #     #    
+; Gameboard Layout Constants
+;     1   2   3
+;
+; A   X │ X │ O 
+;    ───┼───┼───
+; B     │ O │   
+;    ───┼───┼───
+; C   X │   │   
 
 REF_COL_LABELS .FILL COL_LABELS
 REF_ROW_DIVIDER .FILL ROW_DIVIDER

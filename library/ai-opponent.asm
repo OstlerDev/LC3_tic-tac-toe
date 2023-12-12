@@ -274,8 +274,6 @@ AI_CHECK_IF_TILE_WINS
     STR R7, R6, #0   ; Store R7 on the stack
 
     ; Save our registers
-    ; LD R5, REF_PLAYER_TO_CHECK
-    ; STR R0, R5, #0
     LD R5, REF_PREVIOUS_VALUE
     LDR R4, R1, #0 ; Value at Mem location of R1
     STR R4, R5, #0

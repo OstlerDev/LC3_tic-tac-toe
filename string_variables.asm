@@ -33,7 +33,7 @@ LOG_BOT_THINK_2 .STRINGZ "*whrrr* *buzzzz* *burp*"
 LOG_BOT_THINK_3 .STRINGZ "* you can hear someone quietly typing behind a curtain to your right *"
 
 LOG_BOT_1 .STRINGZ "STARTUP COMPLETE!\n"
-LOG_BOT_2 .STRINGZ "Hello,\n"
+LOG_BOT_2 .STRINGZ "\n\n\n\n\n\n\nHello,\n"
 LOG_BOT_3 .STRINGZ "HELLO AGAIN,\n"
 LOG_BOT_4 .STRINGZ "Would you like to play a game of Tic-Tac-Toe?\n\n"
 LOG_BOT_5 .STRINGZ "I SEE YOU HAVE NOT BEEN BEATEN ENOUGH TIMES\n"
