@@ -31,9 +31,6 @@ SELECT_TILE
     ADD R6, R6, #1   ; Increment stack pointer
     RET
 
-
-REF_INPUT_ERROR_TILE_NOT_AVAILABLE .FILL INPUT_ERROR_TILE_NOT_AVAILABLE
-
 ; Check if the tile is taken and act appropriately
 ; This method is for the player, the AI also uses CHECK_TILE
 ; This method adds invalid input logging and will loop back to requesting input
@@ -43,7 +40,7 @@ CHECK_TILE_PLAYER
     STR R7, R6, #0   ; Store R7 on the stack
 
     JSR CHECK_TILE   ; Check if tile is taken
-    BRP PLAYER_TILE_NOT_AVAILABLE
+    BRZ PLAYER_TILE_NOT_AVAILABLE
 
     ; Pop R7 off the stack
     LDR R7, R6, #0   ; Load R7 from the stack
@@ -51,11 +48,14 @@ CHECK_TILE_PLAYER
 
     RET
 
+REF_INPUT_ERROR_TILE_NOT_AVAILABLE .FILL INPUT_ERROR_TILE_NOT_AVAILABLE
+
 PLAYER_TILE_NOT_AVAILABLE
-    ; Pop R7 off the stack
-    LDR R7, R6, #0   ; Load R7 from the stack
-    ADD R6, R6, #1   ; Increment stack pointer
-    BRP REF_INPUT_ERROR_TILE_NOT_AVAILABLE
+    ; ; Pop R7 off the stack
+    ; LDR R7, R6, #0   ; Load R7 from the stack
+    ; ADD R6, R6, #1   ; Increment stack pointer
+    LD R0, REF_INPUT_ERROR_TILE_NOT_AVAILABLE
+    JMP R0
 
 ; Subroutine to check if the selected tile is available
 ; This is used extensively throughout the code!
